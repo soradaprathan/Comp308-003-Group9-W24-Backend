@@ -12,7 +12,7 @@ const vitalResolver = {
         vitalId: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: async (_, { userID, vitalId }) => {
-        const user = await User.findById(userID);
+        const user = await User.findOne({ userID: userID });
         if (!user) throw new Error("User not found");
         const vital = user.vitals.id(vitalId);
         if (!vital) throw new Error("Vital not found");
@@ -27,7 +27,7 @@ const vitalResolver = {
         userID: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: async (_, { userID }) => {
-        const user = await User.findById(userID);
+        const user = await User.findOne({ userID: userID });
         if (!user) throw new Error("User not found");
         return user.vitals;
       },
@@ -41,13 +41,13 @@ const vitalResolver = {
         vitalData: { type: new GraphQLNonNull(VitalInputType) },
       },
       resolve: async (_, { userID, vitalData }) => {
-        const user = await User.findById(userID);
+        const user = await User.findOne({ userID: userID });
         if (!user) throw new Error("User not found");
 
-        const newVital = {
+        let newVital = user.vitals.create({
           ...vitalData,
-          createdAt: new Date(),
-        };
+          addedBy: user.userID,
+        });
 
         user.vitals.push(newVital);
         await user.save();

@@ -1,3 +1,4 @@
+const bodyParser = require("body-parser");
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -5,15 +6,14 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { graphqlHTTP } = require("express-graphql");
-const { GraphQLSchema, GraphQLObjectType } = require("graphql");
 
-const userSchema = require("./graphql/schema/userSchema");
-//const vitalSchema = require("./graphql/schema/vitalSchema");
+const schema = require("./graphql/schema/schema");
 
 const { createToken, requireAuth, checkRole } = require("./utils/utils");
 
 // app.use(express.static("public"));
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
@@ -28,19 +28,15 @@ mongoose
   )
   .catch((err) => console.log(err));
 
-// app.use(
-//   "/graphql",
-//   graphqlHTTP((req, res) => ({
-//     schema: schema,
-//     graphiql: true,
-//     context: { res },
-//   }))
-// );
+// const loggingMiddleware = (req, res, next) => {
+//   next();
+// };
+
 app.use(
   "/graphql",
   requireAuth,
   graphqlHTTP((req, res) => ({
-    schema: userSchema,
+    schema: schema,
     graphiql: true,
     context: {
       user: req.user,
@@ -49,4 +45,6 @@ app.use(
   }))
 );
 
-// app.listen(3000, () => console.log("Server Started"));
+var tensorflow = require("./TensorFlow/predict");
+
+app.post("/predict", tensorflow.trainAndPredict);

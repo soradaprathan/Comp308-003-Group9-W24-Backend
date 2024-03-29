@@ -25,6 +25,10 @@ const VitalsType = new GraphQLObjectType({
     weight: { type: new GraphQLNonNull(GraphQLString) },
     entryType: { type: new GraphQLNonNull(VitalEntryTypeEnum) },
     createdAt: { type: new GraphQLNonNull(GraphQLDate) },
+<<<<<<< HEAD
+=======
+    updatedAt: { type: new GraphQLNonNull(GraphQLDate) },
+>>>>>>> 019635e (GraphQL schema resolver, closes #3)
   }),
 });
 

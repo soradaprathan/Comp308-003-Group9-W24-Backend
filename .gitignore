@@ -26,7 +26,10 @@
 Thumbs.db
 Desktop.ini
 
+<<<<<<< HEAD
 #Log
+=======
+>>>>>>> 019635e (GraphQL schema resolver, closes #3)
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -117,7 +117,6 @@ const userResolver = {
       resolve: async (_, { email, password }, context) => {
         try {
           const user = await User.login(email, password);
-
           const token = createToken(user.id);
           console.log("Token is " + token);
           context.res.cookie("jwt", token, {

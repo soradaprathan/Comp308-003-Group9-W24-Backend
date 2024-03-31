@@ -9,7 +9,7 @@ const { graphqlHTTP } = require("express-graphql");
 
 const schema = require("./graphql/schema/schema");
 
-const { createToken, requireAuth, checkRole } = require("./utils/utils");
+const { requireAuth } = require("./utils/utils");
 
 // app.use(express.static("public"));
 app.use(express.json());
@@ -32,18 +32,26 @@ mongoose
 //   next();
 // };
 
-app.use(
-  "/graphql",
-  requireAuth,
-  graphqlHTTP((req, res) => ({
-    schema: schema,
-    graphiql: true,
-    context: {
-      user: req.user,
-      res,
-    },
-  }))
-);
+// app.use(
+//   "/graphql",
+
+//   graphqlHTTP((req, res) => ({
+//     schema: schema,
+//     graphiql: true,
+//     context: {
+//       user: req.user,
+//       res: res,
+//     },
+//   }))
+// );
+
+const graphqlMiddleware = graphqlHTTP((req, res) => ({
+  schema: schema,
+  graphiql: true,
+  context: { req, res }, // Pass the req and res objects to context
+}));
+
+app.use("/graphql", graphqlMiddleware);
 
 var tensorflow = require("./TensorFlow/predict");
 

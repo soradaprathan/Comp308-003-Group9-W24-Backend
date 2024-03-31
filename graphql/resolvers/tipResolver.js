@@ -1,6 +1,7 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
 const Tip = require("../../models/tip");
 const TipType = require("../types/tipType");
+const { requireAuth } = require("../../utils/utils");
 const tipResolver = {
   Query: {
     tipsByNurseAndPatient: {
@@ -9,8 +10,9 @@ const tipResolver = {
         nurseId: { type: new GraphQLNonNull(GraphQLString) },
         patientId: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve: async (_, { nurseId, patientId }) => {
+      resolve: async (_, { nurseId, patientId }, context) => {
         try {
+          requireAuth(context.req, context.res, () => {});
           const tips = await Tip.find({
             nurseId: nurseId,
             patientId: patientId,
@@ -34,9 +36,11 @@ const tipResolver = {
       },
       resolve: async (
         _,
-        { nurseId, patientId, tipName, tipDescription, status }
+        { nurseId, patientId, tipName, tipDescription, status },
+        context
       ) => {
         try {
+          requireAuth(context.req, context.res, () => {});
           const newTip = new Tip({
             nurseId,
             patientId,

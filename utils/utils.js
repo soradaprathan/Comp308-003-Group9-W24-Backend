@@ -9,6 +9,7 @@ const createToken = (id) => {
 };
 
 const requireAuth = (req, res, next) => {
+  console.log("context" + req.cookies.jwt);
   const token = req.cookies.jwt;
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {

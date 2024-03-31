@@ -1,6 +1,8 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
 const Alert = require("../../models/alert");
 const AlertType = require("../types/alertType");
+const { requireAuth } = require("../../utils/utils");
+
 const alertResolver = {
   Query: {
     getAlertsByUserID: {
@@ -8,8 +10,9 @@ const alertResolver = {
       args: {
         userID: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve: async (_, { userID }) => {
+      resolve: async (_, { userID }, context) => {
         try {
+          requireAuth(context.req, context.res, () => {});
           const alerts = await Alert.find({ userID });
           return alerts;
         } catch (error) {
@@ -27,8 +30,13 @@ const alertResolver = {
         alertDescription: { type: new GraphQLNonNull(GraphQLString) },
         status: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve: async (_, { userID, alertName, alertDescription, status }) => {
+      resolve: async (
+        _,
+        { userID, alertName, alertDescription, status },
+        context
+      ) => {
         try {
+          requireAuth(context.req, context.res, () => {});
           // Create a new alert using the Alert Mongoose model
           const newAlert = new Alert({
             userID,

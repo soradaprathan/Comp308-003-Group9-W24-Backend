@@ -116,7 +116,9 @@ const userResolver = {
       },
       resolve: async (_, { email, password }, context) => {
         try {
+          console.log("email " + email);
           const user = await User.login(email, password);
+          console.log("User is " + user.id);
           const token = createToken(user.id);
           console.log("Token is " + token);
           context.res.cookie("jwt", token, {
@@ -139,6 +141,16 @@ const userResolver = {
           // Handle any other unexpected errors
           throw new Error("An error occurred during the login process");
         }
+      },
+    },
+    logout: {
+      type: GraphQLString,
+      resolve: async (_, args, context) => {
+        context.res.clearCookie("jwt", {
+          httpOnly: true,
+          path: "/",
+        });
+        return "You've been successfully logged out.";
       },
     },
   },

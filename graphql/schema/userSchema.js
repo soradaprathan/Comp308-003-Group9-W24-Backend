@@ -6,12 +6,8 @@ const {
   GraphQLNonNull,
   GraphQLFloat,
 } = require("graphql");
-<<<<<<< HEAD
 const { GraphQLDate } = require("graphql-iso-date");
 const UserType = require("../types/userType");
-=======
-
->>>>>>> 019635e (GraphQL schema resolver, closes #3)
 const userResolver = require("../resolvers/userResolver");
 
 //RootQueryType for Read Operations

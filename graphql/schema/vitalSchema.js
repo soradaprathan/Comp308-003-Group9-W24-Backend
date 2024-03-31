@@ -6,12 +6,6 @@ const {
   GraphQLNonNull,
   GraphQLFloat,
 } = require("graphql");
-<<<<<<< HEAD
-const { GraphQLDate } = require("graphql-iso-date");
-const VitalType = require("../types/vitalsType");
-=======
-
->>>>>>> 019635e (GraphQL schema resolver, closes #3)
 const vitalResolver = require("../resolvers/vitalsResolver");
 
 //VitalRootQueryType for Read Operations

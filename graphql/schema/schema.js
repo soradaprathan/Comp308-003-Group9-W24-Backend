@@ -5,12 +5,14 @@ const UserType = require("../types/userType");
 const VitalsType = require("../types/vitalsType");
 const AlertType = require("../types/alertType");
 const TipType = require("../types/tipType");
+const CovidType = require("../types/covidType");
 
 // Import your resolvers
 const userResolver = require("../resolvers/userResolver");
 const vitalResolver = require("../resolvers/vitalsResolver");
 const alertResolver = require("../resolvers/alertResolver");
 const tipResolver = require("../resolvers/tipResolver");
+const covidResolver = require("../resolvers/covidResolver");
 
 // Create a RootQuery by merging queries from both domains
 const RootQuery = new GraphQLObjectType({
@@ -20,6 +22,7 @@ const RootQuery = new GraphQLObjectType({
     ...vitalResolver.Query,
     ...alertResolver.Query,
     ...tipResolver.Query,
+    ...covidResolver.Query,
   },
 });
 
@@ -31,6 +34,7 @@ const RootMutation = new GraphQLObjectType({
     ...vitalResolver.Mutation,
     ...alertResolver.Mutation,
     ...tipResolver.Mutation,
+    ...covidResolver.Mutation,
   },
 });
 

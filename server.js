@@ -56,3 +56,6 @@ app.use("/graphql", graphqlMiddleware);
 var tensorflow = require("./TensorFlow/predict");
 
 app.post("/predict", tensorflow.trainAndPredict);
+
+var covidfn = require("./TensorFlow/predictCovid");
+app.post("/predictCovid", covidfn.trainAndPredict);

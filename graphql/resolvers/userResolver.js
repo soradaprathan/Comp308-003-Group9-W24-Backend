@@ -11,6 +11,7 @@ const User = require("../../models/user");
 const UserType = require("../types/userType");
 const { createToken, requireAuth, checkRole } = require("../../utils/utils");
 const bcrypt = require("bcrypt");
+const LoginReturnType = require("../types/loginType");
 
 const userResolver = {
   Query: {
@@ -42,6 +43,19 @@ const userResolver = {
         } catch (error) {
           console.error("Error fetching user:", error);
           throw new Error("Error fetching user");
+        }
+      },
+    },
+    patients: {
+      type: new GraphQLList(UserType),
+      description: "Get patient list",
+      resolve: async () => {
+        try {
+          const patients = await User.find({ role: "Patient" });
+          return patients;
+        } catch (error) {
+          console.log("error fetching patients:", error);
+          throw new Error("Error fetching patients");
         }
       },
     },
@@ -109,7 +123,7 @@ const userResolver = {
     },
 
     login: {
-      type: GraphQLString,
+      type: LoginReturnType,
       args: {
         email: { type: new GraphQLNonNull(GraphQLString) },
         password: { type: new GraphQLNonNull(GraphQLString) },
@@ -126,15 +140,15 @@ const userResolver = {
             maxAge: 3 * 24 * 60 * 60 * 1000,
           });
           // Return a success message
-          return `Login Success! Token: ${token}, Role: ${user.role}`;
+          return { token, role: user.role, id: user.id };
         } catch (error) {
           console.error("Login error:", error);
           // Handle specific error messages
           if (error.message === "User not found") {
             throw new Error("User not found");
           } else if (
-            error.message === "Incorrect password" ||
-            error.message === "Incorrect email"
+            error.message === "incorrect password" ||
+            error.message === "incorrect email"
           ) {
             throw new Error("Incorrect email or password");
           }

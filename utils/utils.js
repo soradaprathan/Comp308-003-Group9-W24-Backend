@@ -9,8 +9,8 @@ const createToken = (id) => {
 };
 
 const requireAuth = (req, res, next) => {
-  console.log("context" + req.cookies.jwt);
-  const token = req.cookies.jwt;
+  console.log("context " + req.headers.authorization.split("Bearer ")[1]);
+  const token = req.headers.authorization.split("Bearer ")[1];
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
       if (err) {
@@ -18,8 +18,11 @@ const requireAuth = (req, res, next) => {
         res.status(401).json({ message: "Authentication error." });
       } else {
         try {
+          console.log(decodedToken.id.trim());
           const user = await User.findById(decodedToken.id).select("-password");
+          console.log(user);
           if (user) {
+            console.log(user);
             req.user = user;
             next();
           } else {

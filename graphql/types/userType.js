@@ -6,6 +6,8 @@ const {
   GraphQLInt,
   GraphQLNonNull,
   GraphQLFloat,
+  GraphQLBoolean,
+  GraphQLScalarType,
 } = require("graphql");
 
 const { GraphQLDate } = require("graphql-iso-date");

@@ -113,7 +113,7 @@ const vitalResolver = {
       },
       resolve: async (_, { userID, vitalData }, context) => {
         requireAuth(context.req, context.res, () => {});
-        const user = await User.findOne({ userID: userID });
+        const user = await User.findOne({ _id: userID });
         if (!user) throw new Error("User not found");
 
         let newVital = user.vitals.create({

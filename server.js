@@ -11,7 +11,6 @@ const schema = require("./graphql/schema/schema");
 
 const { requireAuth } = require("./utils/utils");
 
-// app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -28,27 +27,10 @@ mongoose
   )
   .catch((err) => console.log(err));
 
-// const loggingMiddleware = (req, res, next) => {
-//   next();
-// };
-
-// app.use(
-//   "/graphql",
-
-//   graphqlHTTP((req, res) => ({
-//     schema: schema,
-//     graphiql: true,
-//     context: {
-//       user: req.user,
-//       res: res,
-//     },
-//   }))
-// );
-
 const graphqlMiddleware = graphqlHTTP((req, res) => ({
   schema: schema,
   graphiql: true,
-  context: { req, res }, // Pass the req and res objects to context
+  context: { req, res },
 }));
 
 app.use("/graphql", graphqlMiddleware);
